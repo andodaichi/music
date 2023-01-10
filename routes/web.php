@@ -41,9 +41,7 @@ Route::middleware('auth')->group(function () {
 
 Route::group(["middleware" => ["auth"]], function() {
 
-  Route::get("/posts", function() {
-       return Inertia::render("Post/Index");
-   }) ;
+  Route::get("/posts", [PostController::class, "index"]);
 
 });
 
