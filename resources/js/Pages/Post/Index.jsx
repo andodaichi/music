@@ -1,10 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import { Inertia } from "@inertiajs/inertia";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
+import { Link } from '@inertiajs/inertia-react'
 
 const Index = (props) => {
-    const { posts } = props; // 追加
-    console.log(props); // 確認用に追加
+    const { posts } = props; 
+
+    const handleDeletePost = (id) => {
+        Inertia.delete(`/posts/${id}`, {
+            onBefore: () => confirm("本当に削除しますか？"),
+        })
+    }
 
     return (
         <Authenticated auth={props.auth} header={
@@ -12,14 +18,21 @@ const Index = (props) => {
                     Index
                 </h2>
             }>
-            
+
             <div className="p-12">
+                <Link href="/posts/create">create</Link>
+
                 <h1>Blog Name</h1>
 
                 { posts.map((post) => (
                     <div key={post.id}>
-                        <h2>{ post.title }</h2>
+                        <h2>
+                            <Link href={`/posts/${post.id}`}>{ post.title }</Link>
+                        </h2>
                         <p>{ post.body }</p>
+                        <p>{ post.category.name }</p>
+                        
+                        <button className="p-1 bg-purple-300 hover:bg-purple-400 rounded-md" onClick={() => handleDeletePost(post.id)}>delete</button>
                     </div>
                 )) }
             </div>
